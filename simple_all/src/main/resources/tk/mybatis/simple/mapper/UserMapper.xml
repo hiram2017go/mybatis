@@ -70,7 +70,7 @@
     <insert id="insert">
         insert into sys_user(user_name, user_password, user_email,user_info, head_img, create_time)
         values(
-        #{userName},#{userPassword}, #{userEmail}, #{userInfo}, #{headImg, jdbcType=BLOB}, #{crateTime, jdbcType=TIMESTAMP}
+        #{userName},#{userPassword}, #{userEmail}, #{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -78,11 +78,17 @@
        INSERT INTO sys_user(
        user_name, user_password,
        <if test="userEmail != null">
-               <if test="userEmail != '' ">
-                  user_mail,
-               </if>
+       <if test="userEmail != '' ">
+           user_email,
        </if>
+   </if>
        user_info, head_img, create_time) VALUES (
+       #{userName}, #{userPassword},
+       <if test="userEmail != null">
+           <if test="userEmail != '' ">
+               #{userEmail},
+           </if>
+       </if>
        #{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP}
        )
    </insert>
