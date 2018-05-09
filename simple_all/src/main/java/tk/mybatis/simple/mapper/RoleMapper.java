@@ -9,7 +9,7 @@ import java.util.List;
 @CacheNamespaceRef(RoleMapper.class)
 public interface RoleMapper {
 
-    @Select({"select id,role_name roleName,create_by createBy,create_time createTime",
+    @Select({"select id,role_name roleName, enabled,create_by createBy,create_time createTime",
             "from sys_role",
             "where id = #{id}"})
     SysRole selectById(Long id);
@@ -35,11 +35,11 @@ public interface RoleMapper {
     int insert(SysRole sysRole);
 
     @Insert({"insert into sys_role(role_name, enabled, create_by, create_time)"})
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id") //这一行是用来返回自增主键
     int insert2(SysRole sysRole);
 
     @Insert({"insert into sys_role(role_name, enabeld, create_by, create_time)"})
-    @SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", resultType = Long.class, before = false)
+    @SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", resultType = Long.class, before = false)//返回插入的主键信息  before=false 等同于 order=after
     int insert3(SysRole sysRole);
 
     @Update({"update sys_role",

@@ -53,7 +53,7 @@
               INNER JOIN sys_role r on ur.role_id = r.id where u.id = #{userid}
     </select>
 
-    <select id="selectRoleByUserIdAndRoleEnabled" resultType="tk.mybatis.simple.model.SysRole">
+    <select id="selectRolesByUserIdAndRoleEnabled" resultType="tk.mybatis.simple.model.SysRole">
         select r.id, r.role_name roleName, r.enabled,r.create_by createBy, r.create_time createTime
         from sys_user u INNER JOIN sys_user_role ur on u.id = ur.user_id
         INNER JOIN sys_role r on ur.role_id = r.id
@@ -74,6 +74,7 @@
         )
     </insert>
 
+    <!--自增的主键获取可以直接通过设置useGeneratedKeys 和 keyProperty-->
    <insert id="insert2" useGeneratedKeys="true" keyProperty="id">
        INSERT INTO sys_user(
        user_name, user_password,
@@ -98,6 +99,7 @@
         user_name, user_password, user_email,user_info, head_img,create_time) VALUES (
         #{userName}, #{userPassword}, #{userEmail}, #{userInfo}, #{headImg, jdbcType=BLOB}, #{createTime, jdbcType=TIMESTAMP})
 
+        <!--使用selectkey标签查看插入的主键，resultType用于设置返回值类型.-->
         <selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -171,16 +173,16 @@
     <select id="selectByIdOrUserName" resultType="tk.mybatis.simple.model.SysUser">
         select id,user_name userName,user_password userPassword, user_email userEmail,
         user_info userInfo, head_img headIMg, create_time createTime
-        form sys_usere where 1 = 1
+        FROM sys_user where 1 = 1
         <choose>
             <when test="id != null">
                 and id = #{id}
             </when>
             <when test="userName != null and userName != '' ">
-                and userName = #{userName}
+                and user_Name = #{userName}
             </when>
             <otherwise>
-                limit 0
+                and 1 = 2
             </otherwise>
         </choose>
     </select>
